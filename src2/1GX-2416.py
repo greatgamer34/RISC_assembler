@@ -1,3 +1,10 @@
+#AUTHORS#
+#TheWildJarvi#
+#Nano#
+#Lululombard#
+
+
+
 import re
 import binary as bin
 
@@ -10,10 +17,9 @@ import os
 # nop
 # unconditional branch
 
-def read_file(filename):
+def read_file(f):
     s = []
-    with open(filename) as f:
-            s = f.read().splitlines()
+    s = f.read().splitlines()
     return s
 
 
@@ -401,7 +407,7 @@ def asmtoint(asm):
         else:
             rs2 = registers[args[2]]
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------#
     #else:
     #    return 0,0,0,0,0
     #(opcode, rd, rs1, rs2, imm )
@@ -409,28 +415,27 @@ def asmtoint(asm):
     print  xlen(4,opcode, 0) + xlen(4,rd, 0) + xlen(4,rs1, 0) + xlen(4,rs2, 0) + xlen(8 ,imm, 0)
     return xlen(4,opcode, 0) + xlen(4,rd, 0) + xlen(4,rs1, 0) + xlen(4,rs2, 0) + xlen(8 ,imm, 0)
 
-
+#-----------------------------------------------------------------------------------------------------#
 parser = argparse.ArgumentParser(description='Assemble code')
 parser.add_argument('input', type=argparse.FileType('r'), help='Input assembly file')
 
 args = parser.parse_args()
 
-input_filename = args.input.name()
+input_file = args.input
 
-output_file = os.path.splitext(input_filename)[0]
+output_filename = os.path.splitext(input_file.name)[0] + '.bin'
 
-with open(output_filename) as output_file:
+with open(output_filename, 'w') as output_file:
   out = []
 
-  asm_code = read_file(input_filename)  # STICK PATH HERE AS STRING LIKE SO  -> 'file.asm'
+  asm_code = read_file(input_file)  # STICK PATH HERE AS STRING LIKE SO  -> 'file.asm'
 
+  output_buffer = []
 
   for line in asm_code:
-      out.append(asmtoint(line))
-      output
+      output_buffer.append(asmtoint(line))
+  
+  output_file.write('\n'.join(output_buffer))
 
 
-  #print_asm(asm_code)
-
-  #test_input = 'sti, ra, 0x03'
-  #print(asmtoint(test_input))
+#------------------------------------------------------------------------------------------------------#
